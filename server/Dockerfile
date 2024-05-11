@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /lushcafeteria
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /lushcafeteria cmd/api/main.go
 
 EXPOSE 8080 
 
