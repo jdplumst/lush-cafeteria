@@ -1,4 +1,4 @@
-FROM golang:1.22.0-alpine as builder
+FROM golang:1.22.0 as builder
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /lushcafeteria cmd/api/main.go
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o /lushcafeteria cmd/api/main.go
 
 EXPOSE 8080 
 
