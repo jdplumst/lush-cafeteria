@@ -15,6 +15,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.Use(middleware.Logger)
 
 	r.Get("/", s.HelloWorldHandler)
+	r.Get("/health", s.healthHandler)
 
 	return r
 }
@@ -31,4 +32,9 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(jsonResp)
 	w.WriteHeader(http.StatusOK)
+}
+
+func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
+	jsonResp, _ := json.Marshal(s.db.Health())
+	_, _ = w.Write(jsonResp)
 }

@@ -5,10 +5,13 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/jdplumst/lushcafeteria/server/internal/database"
 )
 
 type Server struct {
 	port int
+	db   database.Service
 }
 
 func NewServer() *http.Server {
@@ -19,6 +22,7 @@ func NewServer() *http.Server {
 
 	NewServer := &Server{
 		port: port,
+		db:   database.New(),
 	}
 
 	server := &http.Server{
