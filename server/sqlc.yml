@@ -1,0 +1,10 @@
+version: "2"
+sql:
+  - name: "food"
+    engine: "sqlite"
+    queries: "internal/db/queries"
+    schema: "migrations"
+    gen:
+      go:
+        package: "db"
+        out: "internal/db"

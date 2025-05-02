@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -15,7 +16,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r.Use(middleware.Logger)
 
 	r.Get("/", s.HelloWorldHandler)
-	r.Get("/health", s.healthHandler)
+	// r.Get("/health", s.healthHandler)
+	r.Get("/food", s.foodHandler)
 
 	return r
 }
@@ -34,7 +36,28 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
-	jsonResp, _ := json.Marshal(s.db.Health())
-	_, _ = w.Write(jsonResp)
+// func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
+// 	jsonResp, _ := json.Marshal(s.db.Health())
+// 	_, _ = w.Write(jsonResp)
+// }
+
+func (s *Server) foodHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	_, err := s.db.GetFoods(ctx)
+	if err != nil {
+		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	resp := make(map[string]string)
+	resp["message"] = "It works!"
+	jsonResp, err := json.Marshal(resp)
+	if err != nil {
+		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	w.Write(jsonResp)
+	w.WriteHeader(http.StatusOK)
+
 }
